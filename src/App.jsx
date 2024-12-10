@@ -11,11 +11,9 @@ import { SiHomepage } from "react-icons/si";
 import Homepage from "./components/HomePage";
 import UserAuth from "./components/UserAuth";
 import Register from "./components/Register";
-
 import Shirt from "./clothings/Shirt";
 import Hoodies from "./clothings/Hoodies";
 import Hats from "./clothings/Hats";
-import Pants from "./clothings/Pants";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -38,7 +36,6 @@ function App() {
           <Route path="/shirt" element={<Shirt />} /> {/* Shirt page */}
           <Route path="/hoodies" element={<Hoodies />} /> {/* Hoodies page */}
           <Route path="/hats" element={<Hats />} /> {/* Hats page */}
-          <Route path="/pants" element={<Pants />} /> {/* Pants page */}
         </Routes>
       </Router>
     </>

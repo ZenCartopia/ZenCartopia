@@ -41,11 +41,8 @@ function Navigation() {
         <Link to="/hats">
           <li className="p-4 hover:text-slate-600">Hats</li>
         </Link>
-        <Link to="/pants">
-          <li className="p-4 hover:text-slate-600">Pants</li>
-        </Link>
       </ul>
-      
+
       <div className="flex items-center space-x-6 text-3xl gap-4">
         <>
           <div className="flex items-center border rounded-full px-4 py-2 w-64 hover:scale-110 hover:shadow-lg transition-transform duration-300 border-gray-800">
