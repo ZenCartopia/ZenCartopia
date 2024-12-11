@@ -11,19 +11,19 @@ function Hats() {
       <Cards
         image={hat1}
         title={"Dota 2 Tidehunter"}
-        price={"$45"}
+        price={45}
         description={"Bucket Hat"}
       />
       <Cards
         image={hat2}
         title={"Oakita"}
-        price={"$35"}
+        price={35}
         description={"Baseball Hat"}
       />
       <Cards
         image={hat3}
         title={"Dota 2 Hat"}
-        price={"$30"}
+        price={30}
         description={"Baseball Cap"}
       />
     </div>

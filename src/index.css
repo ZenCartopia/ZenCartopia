@@ -7,8 +7,8 @@ body {
   font-family: ui-monospace;
   font: antialiased;
 
-  background-image: url("./assets/image.avif");
-  background-size: cover;
+  background-image: url("./assets/background.png");
+  background-size: 100% auto;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh; /* Ensures full viewport height */

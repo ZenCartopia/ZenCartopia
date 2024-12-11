@@ -17,18 +17,18 @@ function Navigation() {
 
   // Function to handle account icon click
   const handleAccountClick = () => {
-    // Only navigate to UserAuth if the current page is Welcome
-    if (location.pathname === "/") {
-      navigate("/userauth");
-    }
+    // Navigate to UserAuth page, doesn't matter what page I am in.
+    navigate("/userauth");
   };
 
   return (
     <div className="flex justify-between items-center h-24 mx-auto px-10 py-10 hover:cursor-pointer mt-6 border-b-2 border-gray-500 shadow-md">
-      {/* <h1 className="text-[55px] hover:text-slate-600">ZenCarToPiA.</h1> */}
-      <h1 className="text-[40px] md:text-[40px] drop-shadow-2xl hover:text-slate-600">
-        ZenCarToPiA.
-      </h1>
+      {/* Wrap the heading in a Link to navigate to the Welcome page ("/") */}
+      <Link to="/">
+        <h1 className="text-[40px] md:text-[40px] drop-shadow-2xl hover:text-slate-600">
+          ZenCarToPiA.
+        </h1>
+      </Link>
 
       <ul className="flex space-x-6 text-[35px]">
         {/* Use Link component to navigate to the Shirt page */}
@@ -58,10 +58,12 @@ function Navigation() {
             className="hover:scale-110 transition-transform duration-300 hover:text-stone-500"
             aria-label="Favorites"
           />
-          <FiShoppingCart
-            size={35}
-            className="hover:scale-110 transition-transform duration-300 hover:text-stone-500"
-          />
+          <Link to="/cart">
+            <FiShoppingCart
+              size={35}
+              className="hover:scale-110 transition-transform duration-300 hover:text-stone-500"
+            />
+          </Link>
           {/* Add Link to the UserAuth page */}
           <VscAccount
             size={35}
