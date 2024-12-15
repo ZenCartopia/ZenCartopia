@@ -12,35 +12,37 @@ import Shirt from "./clothings/Shirt";
 import Hoodies from "./clothings/Hoodies";
 import Hats from "./clothings/Hats";
 import Cart from "./components/Cart";
-import { CartProvider } from "./components/CartContext"; // Import the provider
+import { CartProvider } from "./components/CartContext";
+import Search from "./components/Search";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState(""); // State to track search query
 
   return (
-    <>
-      <CartProvider>
-        <Router>
-          {/* Include the Navigation component */}
-          <Navigation />
-          <Routes>
-            {/* Define the route for UserAuth */}
-            {/* Root route Welcome page */}
-            <Route path="/" element={<Welcome />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/userauth" element={<UserAuth />} />
-            <Route path="/signinpage" element={<SignInPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/homePage" element={<Homepage />} />
-            {/* All the clothing links here */}
-            <Route path="/shirt" element={<Shirt />} /> {/* Shirt page */}
-            <Route path="/hoodies" element={<Hoodies />} /> {/* Hoodies page */}
-            <Route path="/hats" element={<Hats />} /> {/* Hats page */}
-            <Route path="/cart" element={<Cart />} /> {/* Cart page */}
-          </Routes>
-        </Router>
-      </CartProvider>
-    </>
+    <CartProvider>
+      <Router>
+        <Navigation onSearch={setSearchQuery} />
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/userauth" element={<UserAuth />} />
+          <Route path="/signinpage" element={<SignInPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/homePage" element={<Homepage />} />
+          <Route
+            path="/hoodies"
+            element={<Hoodies searchQuery={searchQuery} />}
+          />
+          <Route path="/shirt" element={<Shirt searchQuery={searchQuery} />} />
+          <Route path="/hats" element={<Hats searchQuery={searchQuery} />} />
+          <Route
+            path="/search"
+            element={<Search searchQuery={searchQuery} />}
+          />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

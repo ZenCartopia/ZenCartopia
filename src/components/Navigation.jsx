@@ -11,7 +11,7 @@ import "../style/Nav.css";
 import { VscAccount } from "react-icons/vsc";
 import { FiList, FiHeart, FiShoppingCart, FiSearch } from "react-icons/fi";
 
-function Navigation() {
+function Navigation({ onSearch }) {
   const navigate = useNavigate(); // Initialize navigate function
   const location = useLocation(); // Get the current location (page)
 
@@ -19,6 +19,14 @@ function Navigation() {
   const handleAccountClick = () => {
     // Navigate to UserAuth page, doesn't matter what page I am in.
     navigate("/userauth");
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.trim();
+    onSearch(query); // Update global search query in App.jsx
+    if (query) {
+      navigate("/search");
+    }
   };
 
   return (
@@ -43,13 +51,16 @@ function Navigation() {
         </Link>
       </ul>
 
+      {/* Icons and Search Bar */}
       <div className="flex items-center space-x-6 text-3xl gap-4">
         <>
+          {/* Search Bar */}
           <div className="flex items-center border rounded-full px-4 py-2 w-64 hover:scale-110 hover:shadow-lg transition-transform duration-300 border-gray-800">
             <FiSearch size={35} className="text-gray-500 mr-2" />
             <input
               type="text"
               placeholder="Search..."
+              onChange={handleSearch}
               className="search-input outline-none w-full bg-transparent text-gray-700"
             />
           </div>
