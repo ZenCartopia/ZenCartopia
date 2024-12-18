@@ -23,12 +23,13 @@ public class  IdentityController {
 
     // Endpoint for user registration
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) {
         try {
-            identityService.registerUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+            ResponseEntity<AuthResponse> authResponse = identityService.registerUser(user);
+            return authResponse;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed: " + e.getMessage());
+            AuthResponse authResponse = new AuthResponse("", "User registration failed: " + e.getMessage() );
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
         }
     }
 
