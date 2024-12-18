@@ -1,0 +1,70 @@
+# Node.js dependencies
+node_modules/
+dist/
+.vite/
+*.log
+
+# Logs and runtime data
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vscode/
+
+# Dependency directories
+/.pnp
+.pnp.js
+/.parcel-cache
+
+# Production
+build/
+temp/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+<<<<<<< Updated upstream
+node_modules
+=======
+
+# IDE/Editor settings
+../.idea/
+*.iml
+.DS_Store
+*.swp
+Thumbs.db
+
+# macOS system files
+.DS_Store
+
+# Spring Boot Specific
+/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Generated files
+*.log
+*.properties
+*.settings/
+*.project
+*.classpath
+.mvn/
+.mvnd/
+!/.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ specific
+/.idea/
+/*.iml
+
+# Eclipse specific
+/.settings/
+/.project
+.classpath
+
+# Logs
+/logs/
+/*.log
+>>>>>>> Stashed changes
