@@ -1,27 +1,18 @@
 package com.zencartopia.web.services.impl;
 
-
+import com.zencartopia.web.models.PaymentInformation;
 import com.zencartopia.web.models.User;
 import com.zencartopia.web.repositories.UserRepository;
+import com.zencartopia.web.repositories.PaymentRepository;
 import com.zencartopia.web.request.LoginRequest;
 import com.zencartopia.web.response.AuthResponse;
 import com.zencartopia.web.services.IdentityService;
-//import config.JwtProvider;
 import config.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.authentication.BadCredentialsException;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,13 +23,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class IdentityServiceImpl implements IdentityService, UserDetailsService {
@@ -46,20 +37,23 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
     @Autowired
     private UserRepository userRepository;
 
-    private JwtProvider jwtProvider;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
+    private JwtProvider jwtProvider;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public IdentityServiceImpl( UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
-        this.passwordEncoder = passwordEncoder;
+    public IdentityServiceImpl(UserRepository userRepository, PaymentRepository paymentRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         this.userRepository = userRepository;
+        this.paymentRepository = paymentRepository;
+        this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
     }
 
     @Override
-    public ResponseEntity<AuthResponse> registerUser(User user) {
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) {
         // Check if username or email already exists
         if (userRepository.existsByUsername(user.getUsername()) || userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Username or Email already in use");
@@ -67,27 +61,43 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
 
         // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Handle payment information
+        if (user.getPaymentInformation() != null) {
+            // Save the payment information
+            PaymentInformation payment = user.getPaymentInformation();
+            paymentRepository.save(payment);  // Save payment first
+
+            // Associate the payment with the user
+            user.setPaymentInformation(payment);
+        }
+
+        // Save the user
         User newUser = userRepository.save(user);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken( newUser.getEmail(), newUser.getPassword());
+        // Generate JWT token
+        Authentication authentication = new UsernamePasswordAuthenticationToken(newUser.getEmail(), newUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
 
+        // Return successful response with the token
         AuthResponse authResponse = new AuthResponse(token, "SignUp Success");
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED) ;
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<AuthResponse> loginUser(LoginRequest loginRequest) {
 
+
+    @Override
+    public ResponseEntity<AuthResponse> loginUser(LoginRequest loginRequest) {
         String userName = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
-        Authentication authentication  = authenticate(userName, password);
+        Authentication authentication = authenticate(userName, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
 
         AuthResponse authResponse = new AuthResponse(token, "SignIn Success");
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED) ;
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
     }
 
     private Authentication authenticate(String userName, String password) {
@@ -114,8 +124,6 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
         return new UsernamePasswordAuthenticationToken(userPresent, null, authorities);
     }
 
-
-
     @Override
     public void logoutUser(String token) {
         // Clear the session
@@ -128,7 +136,6 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
             session.invalidate();
         }
     }
-
 
     @Override
     public User getUserProfile(Long userId) {
@@ -143,11 +150,10 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
 
         // Update fields (e.g., email, password) as needed
         if (updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
-       if (updatedUser.getPassword() != null) user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        if (updatedUser.getPassword() != null) user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 
         return userRepository.save(user);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -160,13 +166,10 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(userPresent.getUsername())
                 .password(userPresent.getPassword())
-//                .authorities(userPresent.getAuthorities())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
                 .disabled(false)
                 .build();
     }
-
 }
-

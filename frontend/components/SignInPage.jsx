@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 
 function SignInPage() {
   const navigate = useNavigate();
@@ -20,8 +20,9 @@ function SignInPage() {
           'Content-Type': 'application/json',
         }
       });
-      console.log("Logged in successfully:", res.data);
+    
       if (res.data.message == "SignIn Success") {
+        console.log("Logged in successfully:", res.data);
         sessionStorage.setItem("token", res.data.token);
         navigate("/welcome"); 
       }
@@ -39,10 +40,10 @@ function SignInPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <input
-                type="text" // Changed from email to text
-                placeholder="Username" // Updated placeholder
+                type="text" 
+                placeholder="Username" 
                 value={username}
-                onChange={(e) => setUsername(e.target.value)} // Updated state
+                onChange={(e) => setUsername(e.target.value)} 
                 className="border rounded-lg p-2 w-full mx-auto"
                 required
               />
@@ -70,7 +71,7 @@ function SignInPage() {
               <div className="flex justify-between items-center w-full">
                 {/* Register button */}
                 <button
-                  type="button" // Prevent form submission
+                  type="button" 
                   onClick={() => navigate("/register")}
                   className="flex justify-start right-4 bg-pink-300 rounded-2xl py-2 px-5 text-2xl"
                 >
