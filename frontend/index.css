@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #dee4e7;
+  font-family: ui-monospace;
+  font: antialiased;
+
+  background-image: url("./assets/background.png");
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh; /* Ensures full viewport height */
+  width: 100%; /* Full width */
+}
+
+/* html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+} */

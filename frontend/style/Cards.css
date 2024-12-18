@@ -1,0 +1,63 @@
+.card {
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px hsl(0, 0%, 0%, 0.1);
+  padding: 20px;
+  margin: 30px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: hsl(39, 100%, 93%);
+}
+
+.card .card-image {
+  display: block;
+  max-width: 40%;
+  height: auto;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column; /* Stack text elements vertically */
+  justify-content: space-between;
+}
+
+.card .card-title {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  color: hsl(0, 0%, 20%);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card .card-text {
+  font-family: Arial, Helvetica, sans-serif;
+  color: hsl(0, 0%, 30%);
+  margin: 0;
+  font-size: 20px;
+}
+
+.add-to-cart {
+  background-color: hsl(219, 19%, 33%);
+  border-radius: 10px;
+  left: auto;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(400px, 1fr)
+  ); /* Responsive grid */
+  gap: 20px; /* Space between cards */
+  justify-items: center; /* Center-align cards horizontally */
+  margin: 0 auto;
+  padding: 20px;
+}
+.card .card-description {
+  font-family: Arial, Helvetica, sans-serif;
+  color: hsl(0, 0%, 30%);
+  margin: 0;
+  font-size: 15px;
+}

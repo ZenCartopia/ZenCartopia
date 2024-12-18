@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/ZenCartopia.iml" filepath="$PROJECT_DIR$/.idea/ZenCartopia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/zencartopia-web.iml" filepath="$PROJECT_DIR$/src/zencartopia-web.iml" />
+    </modules>
+  </component>
+</project>
