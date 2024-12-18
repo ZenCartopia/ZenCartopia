@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navigation from "./Navigation";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,17 +23,37 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+  
     // Simple validation check
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    alert("Registration Successful!");
-    // Here, you can handle form submission, for example, by calling an API
+  
+    try {
+      const user = {
+        username : formData.username,
+        email: formData.email,
+        password: formData.password
+      };
+      const res = await axios.post("http://localhost:5454/api/identity/register", JSON.stringify(user), {
+        headers: {
+          'Content-Type': 'application/json',
+
+        }
+      });
+      if (res.data.message == "SignUp Success") {
+        sessionStorage.setItem("token", res.data.token);
+        navigate("/welcome"); 
+      }
+      console.log("Registration successful:", res.data);
+    } catch (err) {
+      console.error("Error during registration:", err.response?.data || err.message);
+    }
   };
+  
 
   return (
     <>
