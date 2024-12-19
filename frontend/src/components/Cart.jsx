@@ -1,9 +1,8 @@
-import React, { useContext } from "react";
-import { CartContext } from "./CartContext";
+import React from "react";
+import { useCartStore } from "../store/CartStore";
 
 function Cart() {
-  const { cartItems, removeFromCart, updateCartItemQuantity } =
-    useContext(CartContext);
+  const { cartItems, removeFromCart, updateCartItemQuantity } = useCartStore();
 
   const handleIncreaseQuantity = (title, currentQuantity) => {
     updateCartItemQuantity(title, currentQuantity + 1);

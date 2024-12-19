@@ -1,0 +1,69 @@
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3); /* Dimmed background */
+  z-index: 40;
+  transition: opacity 0.3s ease-in-out; /* Smooth fade */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: all; /* Enable clicking */
+}
+
+/* Sliding Menu */
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 16rem;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.hamburger-menu.open {
+  transform: translateX(0);
+}
+
+/* Close Button */
+.hamburger-menu .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.hamburger-menu .close-btn:hover {
+  color: #e3342f;
+}
+
+/* Navigation Links */
+.hamburger-menu nav button {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.hamburger-menu nav button:hover {
+  color: #007bff;
+}
