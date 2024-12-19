@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -80,7 +81,7 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
         String token = jwtProvider.generateToken(authentication);
 
         // Return successful response with the token
-        AuthResponse authResponse = new AuthResponse(token, "SignUp Success");
+        AuthResponse authResponse = new AuthResponse(newUser.getId(), token, "SignUp Success");
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
     }
 
@@ -91,13 +92,27 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
         String userName = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
+        // Authenticate the user
         Authentication authentication = authenticate(userName, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generate JWT token
         String token = jwtProvider.generateToken(authentication);
 
-        AuthResponse authResponse = new AuthResponse(token, "SignIn Success");
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
+        // Fetch the user's details
+        User user = userRepository.findByEmail(userName);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        // Create the AuthResponse with token, message, and userId
+        AuthResponse authResponse = new AuthResponse(user.getId(), token, "SignIn Success");
+
+        // Return the response
+        return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
+
+
 
     private Authentication authenticate(String userName, String password) {
         User userPresent = userRepository.findByEmail(userName);
@@ -143,16 +158,47 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
     }
 
     @Override
-    public User updateUserProfile(Long userId, User updatedUser) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public ResponseEntity<String> updateUserProfile(Long userId, User updatedUser) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Update fields (e.g., email, password) as needed
-        if (updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
-        if (updatedUser.getPassword() != null) user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            // Validate email if provided
+            if (updatedUser.getEmail() != null && !updatedUser.getEmail().equals(user.getEmail())) {
+                if (!isValidEmail(updatedUser.getEmail())) {
+                    return ResponseEntity.badRequest().body("Invalid email format");
+                }
 
-        return userRepository.save(user);
+                if (userRepository.existsByEmail(updatedUser.getEmail())) {
+                    return ResponseEntity.badRequest().body("Email is already in use");
+                }
+                user.setEmail(updatedUser.getEmail());
+            }
+
+            // Password update logic
+            if (updatedUser.getPassword() != "" ) {
+                user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+
+            // Update other fields (e.g., full name, address)
+            if (updatedUser.getFullName() != null) user.setFullName(updatedUser.getFullName());
+            if (updatedUser.getAddress() != null) user.setAddress(updatedUser.getAddress());
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok("User profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Profile update failed: " + e.getMessage());
+        }
     }
+
+
+
+    private boolean isValidEmail(String email) {
+        // Simple email format validation (can use regex or external library for more complex checks)
+        return email.contains("@") && email.contains(".");
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

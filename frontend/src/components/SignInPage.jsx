@@ -1,35 +1,58 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'; 
+import { useCartStore } from "../store/CartStore";
 
 function SignInPage() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const user = {
         email: username,
-        password: password
+        password: password,
       };
-      const res = await axios.post("http://localhost:5454/api/identity/login", JSON.stringify(user), {
-        headers: {
-          'Content-Type': 'application/json',
+  
+      // Step 1: Login API call
+      const loginResponse = await axios.post(
+        "http://localhost:5454/api/identity/login",
+        JSON.stringify(user),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
-    
-      if (res.data.message == "SignIn Success") {
-        console.log("Logged in successfully:", res.data);
-        sessionStorage.setItem("token", res.data.token);
-        navigate("/welcome"); 
+      );
+  
+      if (loginResponse.data.message === "SignIn Success") {
+        const { id, token } = loginResponse.data; 
+  
+        console.log("Logged in successfully:", loginResponse.data);
+  
+        // Step 2: Fetch user profile using token and userId
+        const profileResponse = await axios.get(
+          `http://localhost:5454/api/identity/profile?id=${id}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+  
+        // Step 3: Save user and token in the zustand store
+        const login = useCartStore.getState().login; 
+        login(profileResponse.data, token);
+        navigate("/welcome");
       }
     } catch (err) {
       console.error("Error during Login:", err.response?.data || err.message);
     }
   };
+  
 
   return (
     <>

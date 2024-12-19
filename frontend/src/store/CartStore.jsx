@@ -1,9 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+// Store for managing user authentication and cart items
 export const useCartStore = create(
   persist(
     (set) => ({
+      // User authentication state
+      user: null,
+      token: null,
+
+      // Cart state
       cartItems: [],
 
       // Add item to cart
@@ -38,9 +44,24 @@ export const useCartStore = create(
             item.title === title ? { ...item, quantity: newQuantity } : item
           ),
         })),
+
+      // Login action
+      login: (userData, token) => {
+        set({ user: userData, token });
+      },
+
+      // Logout action
+      logout: () => {
+        set({ user: null, token: null });
+      },
+
+      // Check if the user is logged in
+      isAuthenticated: () => {
+        return !!localStorage.getItem("auth-token");
+      },
     }),
     {
-      name: "cart-storage", // Key to persist cart data in localStorage
+      name: "store", // Key to persist the store data in localStorage
     }
   )
 );

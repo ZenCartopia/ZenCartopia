@@ -10,5 +10,5 @@ public interface IdentityService {
     ResponseEntity<AuthResponse> loginUser(LoginRequest loginRequest);
     void logoutUser(String token);
     User getUserProfile(Long userId);
-    User updateUserProfile(Long userId, User user);
+    ResponseEntity<String> updateUserProfile(Long userId, User user);
 }

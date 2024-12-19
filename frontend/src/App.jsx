@@ -12,7 +12,7 @@ import Hoodies from "./clothings/Hoodies";
 import Hats from "./clothings/Hats";
 import Cart from "./components/Cart";
 import Search from "./components/Search";
-import Profile from "./components/Profile";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(""); // State to track search query
@@ -34,7 +34,7 @@ function App() {
         <Route path="/hats" element={<Hats searchQuery={searchQuery} />} />
         <Route path="/search" element={<Search searchQuery={searchQuery} />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>
   );
