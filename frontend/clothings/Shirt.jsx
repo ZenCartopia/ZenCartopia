@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
 import shirt1 from "../assets/shirt1.png";
@@ -43,8 +43,27 @@ const shirtsData = [
 
 function Shirt({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
+  const [shirtsData, setShirtsData] = useState([]);
 
   const query = searchQuery ? searchQuery.toLowerCase() : "";
+
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      try {
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        setShirtsData(data);
+      } catch (error) {
+        console.error("Error fetching shirts products:", error);
+      }
+    };
+  
+    fetchProductsByCategory();
+  }, []);
 
   // Filter shirts based on the search query
   const filteredShirts = shirtsData.filter((shirt) =>
@@ -93,7 +112,7 @@ function Shirt({ searchQuery }) {
           sortedShirts.map((shirt, index) => (
             <Cards
               key={index}
-              image={shirt.image}
+              image={".." + shirt.imageUrl}
               title={shirt.title}
               price={shirt.price}
               description={shirt.description}

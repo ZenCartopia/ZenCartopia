@@ -1,129 +1,9 @@
 package com.zencartopia.web.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
-
-//@Entity
-//@Table(name = "products")
-//public class Product {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(nullable = false)
-//    private String name;
-//
-//    private String description;
-//
-//    @Column(nullable = false)
-//    private BigDecimal price;
-//
-//    private String imageUrl; // URL for the product image
-//
-//    @Column(nullable = false)
-//    private Integer stockQuantity;
-//
-//    @Embedded
-//    @ElementCollection
-//    private Set<Size> sizes = new HashSet<Size>();
-//
-//    @ManyToOne
-//    @JoinColumn(name="category_id")
-//    private Category category;
-//
-//    public Product(Long id, String name, String description, BigDecimal price, String imageUrl, Integer stockQuantity,  Set<Size> sizes, Category category) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.price = price;
-//        this.imageUrl = imageUrl;
-//        this.stockQuantity = stockQuantity;
-//        this.sizes = sizes;
-//        this.category = category;
-//    }
-//
-//    // Getters and Setters
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public Set<Size> getSizes() {
-//        return sizes;
-//    }
-//
-//    public void setSizes(Set<Size> sizes) {
-//        this.sizes = sizes;
-//    }
-//
-//    public Category getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(Category category) {
-//        this.category = category;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public BigDecimal getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(BigDecimal price) {
-//        this.price = price;
-//    }
-//
-//    public String getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
-//
-//    public Integer getStockQuantity() {
-//        return stockQuantity;
-//    }
-//
-//    public void setStockQuantity(Integer stockQuantity) {
-//        this.stockQuantity = stockQuantity;
-//    }
-//
-//    // Override equals and hashCode for entity equality
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Product product = (Product) o;
-//        return Objects.equals(id, product.id) &&
-//                Objects.equals(name, product.name);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name);
-//    }
-//}
 
 @Entity
 @Table(name = "products")
@@ -132,8 +12,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference // This tells Jackson to avoid serializing the `category` field in `Product`
     private Category category;
 
     @Column(nullable = false, length = 100)
@@ -151,6 +32,74 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
-    // Getters and setters
-}
+    @Transient // Marks this field as non-persistent so it's not stored in the database
+    private int categoryId; // Added transient field for category_id
 
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+        if (category != null) {
+            this.categoryId = category.getId(); // Set category_id when category is set
+        }
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+}

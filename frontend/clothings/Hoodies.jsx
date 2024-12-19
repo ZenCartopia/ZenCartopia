@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
 import hoodie1 from "../assets/hoodie1.png";
@@ -7,42 +7,9 @@ import hoodie3 from "../assets/hoodie3.png";
 import hoodie4 from "../assets/hoodie4.png";
 import hoodie5 from "../assets/hoodie5.png";
 
-// Define hoodies data outside the component
-const hoodiesData = [
-  {
-    image: hoodie1,
-    title: "Windranger Hoodie",
-    price: 50,
-    description: "100% cotton",
-  },
-  {
-    image: hoodie2,
-    title: "Tinker Hoodie",
-    price: 50,
-    description: "100% cotton",
-  },
-  {
-    image: hoodie3,
-    title: "Kunkka Hoodie",
-    price: 50,
-    description: "80% cotton and 20% polyester",
-  },
-  {
-    image: hoodie4,
-    title: "Earthshaker Hoodie",
-    price: 60,
-    description: "100% cotton",
-  },
-  {
-    image: hoodie5,
-    title: "Snapfire Hoodie",
-    price: 60,
-    description: "100% Organic Cotton",
-  },
-];
-
 function Hoodies({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
+  const [hoodiesData, setHoodiesData] = useState([]);
 
   // Filter hoodies based on search query
   const filteredHoodies = hoodiesData.filter((hoodie) =>
@@ -50,6 +17,24 @@ function Hoodies({ searchQuery }) {
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      try {
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hoodies");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        setHoodiesData(data);
+      } catch (error) {
+        console.error("Error fetching hoodies products:", error);
+      }
+    };
+  
+    fetchProductsByCategory();
+  }, []);
 
   // Sort filtered hoodies
   const sortedHoodies = [...filteredHoodies].sort((a, b) => {
@@ -91,7 +76,7 @@ function Hoodies({ searchQuery }) {
           sortedHoodies.map((hoodie, index) => (
             <Cards
               key={index}
-              image={hoodie.image}
+              image={".."+hoodie.imageUrl}
               title={hoodie.title}
               price={hoodie.price}
               description={hoodie.description}

@@ -3,7 +3,7 @@ package com.zencartopia.web.services.impl;
 import com.zencartopia.web.models.PaymentInformation;
 import com.zencartopia.web.models.User;
 import com.zencartopia.web.repositories.UserRepository;
-import com.zencartopia.web.repositories.PaymentRepository;
+import com.zencartopia.web.repositories.PaymentInformationRepository;
 import com.zencartopia.web.request.LoginRequest;
 import com.zencartopia.web.response.AuthResponse;
 import com.zencartopia.web.services.IdentityService;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -38,14 +37,14 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
     private UserRepository userRepository;
 
     @Autowired
-    private PaymentRepository paymentRepository;
+    private PaymentInformationRepository paymentRepository;
 
     private JwtProvider jwtProvider;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public IdentityServiceImpl(UserRepository userRepository, PaymentRepository paymentRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+    public IdentityServiceImpl(UserRepository userRepository, PaymentInformationRepository paymentRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         this.userRepository = userRepository;
         this.paymentRepository = paymentRepository;
         this.passwordEncoder = passwordEncoder;
