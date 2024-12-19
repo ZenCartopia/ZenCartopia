@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProfilePage() {
+function Profile() {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -8,33 +8,31 @@ function ProfilePage() {
     shippingAddress: "",
   });
 
-  const [isEditing, setIsEditing] = useState(false); // State to track edit mode
-  const [updatedInfo, setUpdatedInfo] = useState(customerInfo); // Local state for form
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedInfo, setUpdatedInfo] = useState(customerInfo);
 
   useEffect(() => {
-    // Fetch customer info from API or backend
     const fetchProfile = async () => {
       try {
-        const response = await fetch("/api/user/profile"); // Replace with your API endpoint
+        const response = await fetch("/api/user/profile"); // Update with actual API
+        if (!response.ok) throw new Error("Failed to fetch profile");
         const data = await response.json();
-        setCustomerInfo(data); // Set initial data
-        setUpdatedInfo(data); // Sync with editable fields
+        setCustomerInfo(data);
+        setUpdatedInfo(data);
       } catch (error) {
-        console.error("Failed to fetch profile:", error);
+        console.error("Error fetching profile:", error);
       }
     };
-
     fetchProfile();
   }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUpdatedInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
+    setUpdatedInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
     try {
-      // Simulate API call to save updated info
       const response = await fetch("/api/user/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -42,8 +40,8 @@ function ProfilePage() {
       });
 
       if (response.ok) {
-        setCustomerInfo(updatedInfo); // Save changes locally
-        setIsEditing(false); // Exit edit mode
+        setCustomerInfo(updatedInfo);
+        setIsEditing(false);
       } else {
         console.error("Failed to update profile");
       }
@@ -56,7 +54,6 @@ function ProfilePage() {
     <div className="max-w-3xl mx-auto mt-10 p-4 bg-gray-50 rounded shadow">
       <h2 className="text-3xl font-bold mb-6">Profile</h2>
       <div className="space-y-4">
-        {/* Name */}
         <div>
           <label className="block font-semibold text-gray-700">Name</label>
           {isEditing ? (
@@ -72,7 +69,6 @@ function ProfilePage() {
           )}
         </div>
 
-        {/* Email */}
         <div>
           <label className="block font-semibold text-gray-700">Email</label>
           {isEditing ? (
@@ -88,7 +84,6 @@ function ProfilePage() {
           )}
         </div>
 
-        {/* Credit Card */}
         <div>
           <label className="block font-semibold text-gray-700">
             Credit Card
@@ -106,7 +101,6 @@ function ProfilePage() {
           )}
         </div>
 
-        {/* Shipping Address */}
         <div>
           <label className="block font-semibold text-gray-700">
             Shipping Address
@@ -124,13 +118,12 @@ function ProfilePage() {
         </div>
       </div>
 
-      {/* Buttons */}
       <div className="mt-6 flex space-x-4">
         {isEditing ? (
           <>
             <button
               onClick={handleSave}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
               Save
             </button>
@@ -144,7 +137,7 @@ function ProfilePage() {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-green-700"
           >
             Edit Profile
           </button>
@@ -154,4 +147,4 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default Profile;
