@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import "../style/Cards.css";
 import { FaCartArrowDown } from "react-icons/fa";
-import { CartContext } from "./CartContext"; // Import the context
+import { useCartStore } from "../store/CartStore";
 
 export function Cards({ image, title, price, description, productId, quantity }) {
-  const { addToCart } = useContext(CartContext); // Access addToCart from context
+  const { addToCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false); // For adding a pop-up when adding to cart
 
   const handleAddToCart = () => {

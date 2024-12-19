@@ -10,6 +10,7 @@ import {
 import "../style/Nav.css";
 import { VscAccount } from "react-icons/vsc";
 import { FiList, FiHeart, FiShoppingCart, FiSearch } from "react-icons/fi";
+import HamburgerMenu from "./HamburgerMenu";
 
 function Navigation({ onSearch }) {
   const navigate = useNavigate(); // Initialize navigate function
@@ -30,7 +31,7 @@ function Navigation({ onSearch }) {
   };
 
   return (
-    <div className="flex justify-between items-center h-24 mx-auto px-10 py-10 hover:cursor-pointer mt-6 border-b-2 border-gray-500 shadow-md">
+    <div className="nav flex justify-between items-center h-24 mx-auto px-10 py-10 mt-6 border-b-2 border-gray-500 shadow-md">
       {/* Wrap the heading in a Link to navigate to the Welcome page ("/") */}
       <Link to="/">
         <h1 className="text-[40px] md:text-[40px] drop-shadow-2xl hover:text-slate-600">
@@ -81,10 +82,12 @@ function Navigation({ onSearch }) {
             className="hover:scale-110 transition-transform duration-300 hover:text-stone-500"
             onClick={handleAccountClick} // Takes to UserAuth page when profile icon clicked
           />
-          <FiList
+          {/* <FiList
             size={35}
             className="hover:scale-110 transition-transform duration-300 hover:text-stone-500"
-          />
+          /> */}
+          {/* Hamburger Menu */}
+          <HamburgerMenu />
         </>
       </div>
     </div>
