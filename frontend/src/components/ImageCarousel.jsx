@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import img1 from "../assets/1.png";
-import img2 from "../assets/2.png";
-import img3 from "../assets/3.png";
+import img1 from "/public/assets/1.png";
+import img2 from "/public/assets/2.png";
+import img3 from "/public/assets/3.png";
 
 export default function ImageStackCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);

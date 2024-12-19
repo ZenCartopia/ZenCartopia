@@ -2,38 +2,37 @@ import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
 
-function Hats({ searchQuery }) {
+function Shirt({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
-  const [hatsData, setHatsData] = useState([]);
+  const [shirtsData, setShirtsData] = useState([]);
 
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       try {
-        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hats");
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         console.log(data);
-        setHatsData(data);
+        setShirtsData(data);
       } catch (error) {
-        console.error("Error fetching hats products:", error);
+        console.error("Error fetching shirts products:", error);
       }
     };
   
     fetchProductsByCategory();
   }, []);
-  
 
-  // Filter hats based on the search query
-  const filteredHats = hatsData.filter((hat) =>
-    `${hat.title} ${hat.description}`.toLowerCase().includes(query)
+  // Filter shirts based on the search query
+  const filteredShirts = shirtsData.filter((shirt) =>
+    `${shirt.title} ${shirt.description}`.toLowerCase().includes(query)
   );
 
-  // Sort hats based on the selected sort option
-  const sortedHats = [...filteredHats].sort((a, b) => {
+  // Sort shirts based on the selected sort option
+  const sortedShirts = [...filteredShirts].sort((a, b) => {
     const [sortBy, sortOrder] = sortOption.split("-");
     if (sortBy === "name") {
       return sortOrder === "asc"
@@ -49,10 +48,7 @@ function Hats({ searchQuery }) {
     <div>
       {/* Dropdown menu for sorting */}
       <div className="sort-controls mb-4 flex items-center justify-start space-x-4 p-6">
-        <label
-          htmlFor="sortBy"
-          className="text-lg text-slate-900 font-semibold"
-        >
+        <label htmlFor="sortBy" className="text-lg text-slate-900 font-semibold">
           Sort By:
         </label>
         <select
@@ -68,16 +64,17 @@ function Hats({ searchQuery }) {
         </select>
       </div>
 
-      {/* Render sorted and filtered hat cards */}
+      {/* Render sorted and filtered shirt cards */}
       <div className="card-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedHats.length > 0 ? (
-          sortedHats.map((hat, index) => (
+        {sortedShirts.length > 0 ? (
+          sortedShirts.map((shirt, index) => (
             <Cards
               key={index}
-              image={".."+hat.imageUrl}
-              title={hat.title}
-              price={hat.price}
-              description={hat.description}
+              image={".." + shirt.imageUrl}
+              title={shirt.title}
+              price={shirt.price}
+              description={shirt.description}
+              quantity={shirt.quantity}
             />
           ))
         ) : (
@@ -90,7 +87,7 @@ function Hats({ searchQuery }) {
   );
 }
 
-// Export getData to access the hats data
-Hats.getData = () => hatsData;
+// Export getData to access the shirts data
+Shirt.getData = () => shirtsData;
 
-export default Hats;
+export default Shirt;

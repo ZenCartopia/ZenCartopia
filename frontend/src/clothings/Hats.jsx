@@ -1,77 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
-import shirt1 from "../assets/shirt1.png";
-import shirt2 from "../assets/shirt2.png";
-import shirt3 from "../assets/shirt3.png";
-import shirt4 from "../assets/shirt4.png";
-import shirt5 from "../assets/shirt5.png";
 
-// Static data for shirts
-const shirtsData = [
-  {
-    image: shirt1,
-    title: "Invoker Shirt",
-    price: 20,
-    description: "100% cotton",
-  },
-  {
-    image: shirt2,
-    title: "Civil Engineering Shirt",
-    price: 20,
-    description: "100% cotton",
-  },
-  {
-    image: shirt3,
-    title: "Marci Shirt",
-    price: 15,
-    description: "80% cotton and 20% polyester, Hand Wash",
-  },
-  {
-    image: shirt4,
-    title: "Make it rain Shirt",
-    price: 25,
-    description: "100% cotton",
-  },
-  {
-    image: shirt5,
-    title: "Phantom Assassin Shirt",
-    price: 20,
-    description: "100% Organic Cotton, Machine Wash",
-  },
-];
-
-function Shirt({ searchQuery }) {
+function Hats({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
-  const [shirtsData, setShirtsData] = useState([]);
+  const [hatsData, setHatsData] = useState([]);
 
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       try {
-        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hats");
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         console.log(data);
-        setShirtsData(data);
+        setHatsData(data);
       } catch (error) {
-        console.error("Error fetching shirts products:", error);
+        console.error("Error fetching hats products:", error);
       }
     };
   
     fetchProductsByCategory();
   }, []);
+  
 
-  // Filter shirts based on the search query
-  const filteredShirts = shirtsData.filter((shirt) =>
-    `${shirt.title} ${shirt.description}`.toLowerCase().includes(query)
+  // Filter hats based on the search query
+  const filteredHats = hatsData.filter((hat) =>
+    `${hat.title} ${hat.description}`.toLowerCase().includes(query)
   );
 
-  // Sort shirts based on the selected sort option
-  const sortedShirts = [...filteredShirts].sort((a, b) => {
+  // Sort hats based on the selected sort option
+  const sortedHats = [...filteredHats].sort((a, b) => {
     const [sortBy, sortOrder] = sortOption.split("-");
     if (sortBy === "name") {
       return sortOrder === "asc"
@@ -106,16 +68,17 @@ function Shirt({ searchQuery }) {
         </select>
       </div>
 
-      {/* Render sorted and filtered shirt cards */}
+      {/* Render sorted and filtered hat cards */}
       <div className="card-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedShirts.length > 0 ? (
-          sortedShirts.map((shirt, index) => (
+        {sortedHats.length > 0 ? (
+          sortedHats.map((hat, index) => (
             <Cards
               key={index}
-              image={".." + shirt.imageUrl}
-              title={shirt.title}
-              price={shirt.price}
-              description={shirt.description}
+              image={"/public/" + hat.imageUrl}
+              title={hat.title}
+              price={hat.price}
+              description={hat.description}
+              quantity={hat.quantity}
             />
           ))
         ) : (
@@ -128,7 +91,7 @@ function Shirt({ searchQuery }) {
   );
 }
 
-// Export getData to access the shirts data
-Shirt.getData = () => shirtsData;
+// Export getData to access the hats data
+Hats.getData = () => hatsData;
 
-export default Shirt;
+export default Hats;

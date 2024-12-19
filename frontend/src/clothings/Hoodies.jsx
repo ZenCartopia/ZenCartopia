@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
-import hoodie1 from "../assets/hoodie1.png";
-import hoodie2 from "../assets/hoodie2.png";
-import hoodie3 from "../assets/hoodie3.png";
-import hoodie4 from "../assets/hoodie4.png";
-import hoodie5 from "../assets/hoodie5.png";
 
 function Hoodies({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
@@ -76,10 +71,11 @@ function Hoodies({ searchQuery }) {
           sortedHoodies.map((hoodie, index) => (
             <Cards
               key={index}
-              image={".."+hoodie.imageUrl}
+              image={"/public/"+hoodie.imageUrl}
               title={hoodie.title}
               price={hoodie.price}
               description={hoodie.description}
+              quantity={hoodie.quantity}
             />
           ))
         ) : (

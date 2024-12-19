@@ -14,7 +14,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonBackReference // This tells Jackson to avoid serializing the `category` field in `Product`
+    @JsonBackReference
     private Category category;
 
     @Column(nullable = false, length = 100)
@@ -29,11 +29,14 @@ public class Product {
     @Column(name = "image_url", length = 255)
     private String imageUrl;
 
+    @Column(nullable = false)
+    private int quantity; // Added quantity field
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
 
-    @Transient // Marks this field as non-persistent so it's not stored in the database
-    private int categoryId; // Added transient field for category_id
+    @Transient
+    private int categoryId;
 
     // Getters and Setters
     public int getId() {
@@ -51,7 +54,7 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
         if (category != null) {
-            this.categoryId = category.getId(); // Set category_id when category is set
+            this.categoryId = category.getId();
         }
     }
 
@@ -93,6 +96,14 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public List<OrderItem> getOrderItems() {
