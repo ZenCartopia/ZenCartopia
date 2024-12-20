@@ -1,14 +1,18 @@
 # ZenCartopia - Full Stack E-Commerce Application
 
-ZenCartopia is a full-stack web application built with **React** for the frontend and **Spring Boot** for the backend. It serves as an e-commerce platform that allows users to sign in, edit user Profile browse products, manage their shopping cart and able to place order. This project demonstrates the integration of React and Spring Boot to build a complete and functional web application.
+ZenCartopia is a full-stack web application built with **React** for the frontend and **Spring Boot** for the backend. It serves as an e-commerce platform that allows users to sign in, edit user profiles, browse products, manage their shopping cart, and place orders. This project demonstrates the integration of React and Spring Boot to build a complete and functional web application.
+
+You can access the project on GitHub: [ZenCartopia](https://github.com/ZenCartopia/ZenCartopia/)
 
 ## Table of Contents
 
-- [Frontend Setup (React)](#frontend-setup-react)
-- [Backend Setup (Spring Boot)](#backend-setup-spring-boot)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [License](#license)
+- Frontend Setup (React)
+- Backend Setup (Spring Boot)
+- Configuration
+- Usage
+- License
+
+---
 
 ## Frontend Setup (React)
 
@@ -23,32 +27,32 @@ Ensure you have the following installed:
 
 1. **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/yourusername/zencartopia-frontend.git
-    cd zencartopia-frontend
-    ```
+   ```bash
+   git clone https://github.com/ZenCartopia/ZenCartopia.git
+   cd zencartopia/frontend
+   ```
 
-2. **Navigate to the `src` folder:**
+2. **Install dependencies:**
 
-    ```bash
-    cd src
-    ```
+   ```bash
+   npm install
+   ```
 
-3. **Install dependencies:**
+3. **Navigate to the `src` folder:**
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   cd src
+   ```
 
 4. **Start the development server:**
 
-    To start the frontend, run the following command:
+   To start the frontend, run the following command:
 
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
-    The frontend will be available at `http://localhost:5173`.
+   The frontend will be available at `http://localhost:5173`.
 
 ---
 
@@ -66,27 +70,27 @@ Ensure you have the following installed:
 
 1. **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/yourusername/zencartopia-backend.git
-    cd zencartopia-backend
-    ```
+   ```bash
+   git clone https://github.com/yourusername/zencartopia-backend.git
+   cd zencartopia-backend
+   ```
 
 2. **Install dependencies:**
 
-    In your IDE (e.g., IntelliJ IDEA or Eclipse):
+   In your IDE (e.g., IntelliJ IDEA or Eclipse):
 
-    - **Right-click on the `pom.xml` file**, and select **Maven** -> **Download Sources**.
-    - **Right-click** again and select **Maven** -> **Reload Projects** to ensure all dependencies are properly downloaded.
+   - **Right-click on the `pom.xml` file**, and select **Maven** -> **Download Sources**.
+   - **Right-click** again and select **Maven** -> **Reload Projects** to ensure all dependencies are properly downloaded.
 
 3. **Create the database:**
 
-    Ensure that the MySQL database specified in `application.properties` is created before running the backend. In our case, the database named as `zencartopia`.
+   Ensure that the MySQL database specified in `application.properties` is created before running the backend. In our case, the database name is `zencartopia`.
 
 4. **Run the backend:**
 
-    In your IDE, run the `ZenCartopiaApplication` class (main application class).
+   In your IDE, run the `ZenCartopiaApplication` class (main application class).
 
-    The backend will be available at `http://localhost:5454`.
+   The backend will be available at `http://localhost:5454`.
 
 ---
 
@@ -117,3 +121,4 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # Hibernate Configuration
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+```
