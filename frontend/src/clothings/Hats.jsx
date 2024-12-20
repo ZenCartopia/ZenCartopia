@@ -1,31 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
-import hat1 from "../assets/hat1.png";
-import hat2 from "../assets/hat2.png";
-import hat3 from "../assets/hat3.png";
-
-// Static data for hats
-const hatsData = [
-  {
-    image: hat1,
-    title: "Dota 2 Tidehunter",
-    price: 45,
-    description: "Bucket Hat",
-  },
-  { image: hat2, title: "Oakita", price: 35, description: "Baseball Hat" },
-  {
-    image: hat3,
-    title: "Dota 2 Hat",
-    price: 30,
-    description: "Baseball Cap",
-  },
-];
 
 function Hats({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
+  const [hatsData, setHatsData] = useState([]);
 
   const query = searchQuery ? searchQuery.toLowerCase() : "";
+
+  useEffect(() => {
+    const updatePageHistory = (currentPage) => {
+      const lastPage = localStorage.getItem("currPage"); 
+    
+      if (lastPage && lastPage !== currentPage) {
+        localStorage.setItem("lastPage", lastPage);
+      }
+      localStorage.setItem("currPage", currentPage);
+    };
+  
+    updatePageHistory("/hats");
+    const fetchProductsByCategory = async () => {
+      try {
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hats");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        setHatsData(data);
+      } catch (error) {
+        console.error("Error fetching hats products:", error);
+      }
+    };
+  
+    fetchProductsByCategory();
+  }, []);
+  
 
   // Filter hats based on the search query
   const filteredHats = hatsData.filter((hat) =>
@@ -74,10 +84,12 @@ function Hats({ searchQuery }) {
           sortedHats.map((hat, index) => (
             <Cards
               key={index}
-              image={hat.image}
+              id={hat.id}
+              image={"/public/" + hat.imageUrl}
               title={hat.title}
               price={hat.price}
               description={hat.description}
+              aquantity={hat.aquantity}
             />
           ))
         ) : (

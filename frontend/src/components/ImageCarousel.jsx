@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import img1 from "../assets/1.png";
-import img2 from "../assets/2.png";
-import img3 from "../assets/3.png";
+import React, { useEffect, useState } from "react";
+import img1 from "/public/assets/1.png";
+import img2 from "/public/assets/2.png";
+import img3 from "/public/assets/3.png";
 
 export default function ImageStackCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -11,6 +11,20 @@ export default function ImageStackCarousel() {
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
   };
+
+  useEffect(() => {
+    const handleWelcomePageLoad = () => {
+      const lastVisitedPage = localStorage.getItem("currPage");
+
+      if (!lastVisitedPage) {
+        localStorage.setItem("lastPage", "none");
+      } else if (lastVisitedPage !== "/welcome") {
+        localStorage.setItem("lastPage", lastVisitedPage);
+      }
+      localStorage.setItem("currPage", "/welcome");
+    };
+    handleWelcomePageLoad();
+  }, []);
 
   const handlePreviousSlide = () => {
     setCurrentSlide((prevSlide) =>

@@ -28,7 +28,7 @@ public class AppConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error", "/public/**", "/api/identity/login", "/api/identity/register").permitAll() // Allow public access to these endpoints
+                        .requestMatchers("/error", "/public/**", "/api/identity/login", "/api/identity/register", "/api/categories", "/api/products/**").permitAll() // Allow public access to these endpoints
                         .anyRequest().authenticated() // Secure other endpoints
                 )
                 .addFilterBefore(jwtValidator(), UsernamePasswordAuthenticationFilter.class)

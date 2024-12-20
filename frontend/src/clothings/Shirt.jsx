@@ -1,50 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cards from "../components/Cards.jsx";
 import "../style/Cards.css";
-import shirt1 from "../assets/shirt1.png";
-import shirt2 from "../assets/shirt2.png";
-import shirt3 from "../assets/shirt3.png";
-import shirt4 from "../assets/shirt4.png";
-import shirt5 from "../assets/shirt5.png";
-
-// Static data for shirts
-const shirtsData = [
-  {
-    image: shirt1,
-    title: "Invoker Shirt",
-    price: 20,
-    description: "100% cotton",
-  },
-  {
-    image: shirt2,
-    title: "Civil Engineering Shirt",
-    price: 20,
-    description: "100% cotton",
-  },
-  {
-    image: shirt3,
-    title: "Marci Shirt",
-    price: 15,
-    description: "80% cotton and 20% polyester, Hand Wash",
-  },
-  {
-    image: shirt4,
-    title: "Make it rain Shirt",
-    price: 25,
-    description: "100% cotton",
-  },
-  {
-    image: shirt5,
-    title: "Phantom Assassin Shirt",
-    price: 20,
-    description: "100% Organic Cotton, Machine Wash",
-  },
-];
 
 function Shirt({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
+  const [shirtsData, setShirtsData] = useState([]);
 
   const query = searchQuery ? searchQuery.toLowerCase() : "";
+
+  useEffect(() => {
+    const updatePageHistory = (currentPage) => {
+      const lastPage = localStorage.getItem("currPage"); 
+    
+      if (lastPage && lastPage !== currentPage) {
+        localStorage.setItem("lastPage", lastPage);
+      }
+    
+      localStorage.setItem("currPage", currentPage); 
+    };
+    
+    updatePageHistory("/shirt");
+    
+    const fetchProductsByCategory = async () => {
+      try {
+        const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        setShirtsData(data);
+      } catch (error) {
+        console.error("Error fetching shirts products:", error);
+      }
+    };
+  
+    fetchProductsByCategory();
+  }, []);
 
   // Filter shirts based on the search query
   const filteredShirts = shirtsData.filter((shirt) =>
@@ -68,10 +60,7 @@ function Shirt({ searchQuery }) {
     <div>
       {/* Dropdown menu for sorting */}
       <div className="sort-controls mb-4 flex items-center justify-start space-x-4 p-6">
-        <label
-          htmlFor="sortBy"
-          className="text-lg text-slate-900 font-semibold"
-        >
+        <label htmlFor="sortBy" className="text-lg text-slate-900 font-semibold">
           Sort By:
         </label>
         <select
@@ -93,10 +82,11 @@ function Shirt({ searchQuery }) {
           sortedShirts.map((shirt, index) => (
             <Cards
               key={index}
-              image={shirt.image}
+              image={".." + shirt.imageUrl}
               title={shirt.title}
               price={shirt.price}
               description={shirt.description}
+              aquantity={shirt.aquantity}
             />
           ))
         ) : (
