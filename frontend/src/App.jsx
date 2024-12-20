@@ -13,6 +13,7 @@ import Hats from "./clothings/Hats";
 import Cart from "./components/Cart";
 import Search from "./components/Search";
 import UserProfile from "./components/UserProfile";
+import CheckOutPage from "./components/CheckOutPage";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState(""); // State to track search query
@@ -35,6 +36,7 @@ function App() {
         <Route path="/search" element={<Search searchQuery={searchQuery} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/checkout" element={<CheckOutPage />}/>
       </Routes>
     </Router>
   );

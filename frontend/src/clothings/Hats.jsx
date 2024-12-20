@@ -9,6 +9,16 @@ function Hats({ searchQuery }) {
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
+    const updatePageHistory = (currentPage) => {
+      const lastPage = localStorage.getItem("currPage"); 
+    
+      if (lastPage && lastPage !== currentPage) {
+        localStorage.setItem("lastPage", lastPage);
+      }
+      localStorage.setItem("currPage", currentPage);
+    };
+  
+    updatePageHistory("/hats");
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hats");
@@ -74,11 +84,12 @@ function Hats({ searchQuery }) {
           sortedHats.map((hat, index) => (
             <Cards
               key={index}
+              id={hat.id}
               image={"/public/" + hat.imageUrl}
               title={hat.title}
               price={hat.price}
               description={hat.description}
-              quantity={hat.quantity}
+              aquantity={hat.aquantity}
             />
           ))
         ) : (

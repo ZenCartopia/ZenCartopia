@@ -1,10 +1,11 @@
 package com.zencartopia.web.models;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
-import lombok.*;
 
 @Entity
 @Getter
@@ -12,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Table(name = "orders")
 public class Order {
     @Id
@@ -35,7 +35,12 @@ public class Order {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
+    @Column(name = "shipping_address")
+    private String shippingAddress;
+
+    @Column(name = "billing_address")
+    private String billingAddress;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
-
 }

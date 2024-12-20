@@ -60,7 +60,7 @@ public class ProductService {
             product.setPrice((BigDecimal) result[4]); // Product price
             product.setDescription((String) result[5]); // Product description
             product.setImageUrl((String) result[6]); // Product image URL
-            product.setQuantity((Integer) result[7]); // Product quantity
+            product.setAQuantity((Integer) result[7]); // Product quantity
 
             // Set the category ID (if needed for the Product model)
             int categoryId = (Integer) result[0];

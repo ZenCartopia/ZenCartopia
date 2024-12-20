@@ -30,68 +30,70 @@ function Register() {
     });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
-
-  try {
-    const user = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      fullName: `${formData.firstName} ${formData.lastName}`,
-      address: formData.address,
-      role: formData.role,
-      paymentInformation: {
-        cardHolderName: formData.cardHolderName,
-        cardNumber: formData.cardNumber,
-        cvv: formData.cvv,
-        expiryDate: formData.expiryDate,
-        paymentType: formData.paymentType,
-      },
-    };
-
-    // Step 1: Register API call
-    const registerResponse = await axios.post(
-      "http://localhost:5454/api/identity/register",
-      JSON.stringify(user),
-      {
-        headers: {
-          "Content-Type": "application/json",
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Check if the passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+  
+    try {
+      // Prepare the user object
+      const user = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        address: formData.address,
+        role: formData.role,
+        paymentInformation: {
+          cardHolderName: formData.cardHolderName,
+          cardNumber: formData.cardNumber,
+          cvv: formData.cvv,
+          expiryDate: formData.expiryDate,
+          paymentType: formData.paymentType,
         },
-      }
-    );
-
-    if (registerResponse.data.message === "SignUp Success") {
-      const { token, id } = registerResponse.data; // Extract token and userId
-
-      console.log("Registration successful:", registerResponse.data);
-
-      // Step 2: Fetch user profile using token and userId
-      const profileResponse = await axios.get(
-        `http://localhost:5454/api/identity/profile?id=${id}`,
+      };
+  
+      // Step 1: Register API call
+      const registerResponse = await axios.post(
+        "http://localhost:5454/api/identity/register",
+        user, // Send the object directly, no need for JSON.stringify
         {
           headers: {
-            Authorization: `${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-
-      // Step 3: Save user and token in the zustand store
-      const login = useCartStore.getState().login; // Access the login action
-      login(profileResponse.data, token); // Save profile data and token
-
-      // Step 4: Navigate to the welcome page
-      navigate("/welcome");
+  
+      if (registerResponse.data.message === "SignUp Success") {
+        const { token, id } = registerResponse.data; // Extract token and userId
+  
+        console.log("Registration successful:", registerResponse.data);
+  
+        // Step 2: Fetch user profile using token and userId
+        const profileResponse = await axios.get(
+          `http://localhost:5454/api/identity/profile?id=${id}`,
+          {
+            headers: {
+              Authorization: `${token}`, // Include Bearer for token in authorization header
+            },
+          }
+        );
+  
+        // Step 3: Save user and token in the zustand store
+        const login = useCartStore.getState().login; // Access the login action
+        login(profileResponse.data, token); // Save profile data and token
+        navigate(localStorage.getItem("lastPage") || "/welcome"); // Default to home page if lastPage is not set
+      }
+    } catch (err) {
+      console.error("Error during registration:", err.response?.data || err.message);
+      alert("An error occurred during registration. Please try again.");
     }
-  } catch (err) {
-    console.error("Error during registration:", err.response?.data || err.message);
-  }
-};
+  };
+  
 
   
 

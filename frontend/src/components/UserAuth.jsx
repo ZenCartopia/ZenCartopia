@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Navigation from "./Navigation";
 import { useNavigate } from "react-router-dom";
 
 function UserAuth() {
-  const navigate = useNavigate(); // React Router's navigation hook
+  const navigate = useNavigate(); 
   return (
     <div>
       <div className="flex justify-center items-center h-screen">

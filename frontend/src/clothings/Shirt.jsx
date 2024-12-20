@@ -9,6 +9,18 @@ function Shirt({ searchQuery }) {
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
+    const updatePageHistory = (currentPage) => {
+      const lastPage = localStorage.getItem("currPage"); 
+    
+      if (lastPage && lastPage !== currentPage) {
+        localStorage.setItem("lastPage", lastPage);
+      }
+    
+      localStorage.setItem("currPage", currentPage); 
+    };
+    
+    updatePageHistory("/shirt");
+    
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
@@ -74,7 +86,7 @@ function Shirt({ searchQuery }) {
               title={shirt.title}
               price={shirt.price}
               description={shirt.description}
-              quantity={shirt.quantity}
+              aquantity={shirt.aquantity}
             />
           ))
         ) : (

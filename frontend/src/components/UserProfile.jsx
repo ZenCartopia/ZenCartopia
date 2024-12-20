@@ -16,6 +16,15 @@ const UserProfile = () => {
 
   // Fetch user data when the component mounts
   useEffect(() => {
+    // const updatePageHistory = (currentPage) => {
+    //     const lastPage = localStorage.getItem("currPage");
+      
+    //     if (lastPage && lastPage !== currentPage) {
+    //       localStorage.setItem("lastPage", lastPage);
+    //     }
+    //     localStorage.setItem("currPage", currentPage); 
+    //   };
+    //   updatePageHistory("/profile");
     if (!user) return;
     setUserInfo({
       fullName: user.fullName,
@@ -153,20 +162,6 @@ const UserProfile = () => {
               </button>
             </>
           )}
-
-          {/* Purchase History */}
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold">Purchase History</h3>
-            <ul className="space-y-4">
-              {user.orders.map((order) => (
-                <li key={order.id} className="bg-gray-100 p-4 rounded-lg shadow-sm">
-                  <h4 className="text-lg">Order ID: {order.id}</h4>
-                  <p className="text-sm">Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                  <p className="text-sm">Total: ${order.totalAmount}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
 
           <button
             onClick={handleSignOut}

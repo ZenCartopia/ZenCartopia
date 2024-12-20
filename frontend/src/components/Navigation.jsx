@@ -7,8 +7,8 @@ import { FiList, FiHeart, FiShoppingCart, FiSearch } from "react-icons/fi";
 import { useCartStore } from "../store/CartStore";
 
 function Navigation({ onSearch }) {
-  const navigate = useNavigate(); // Initialize navigate function
-  const token = useCartStore.getState().token; // Get token from zustand store
+  const navigate = useNavigate(); 
+  const token = useCartStore.getState().token; 
 
   // Function to handle account icon click
   const handleAccountClick = () => {

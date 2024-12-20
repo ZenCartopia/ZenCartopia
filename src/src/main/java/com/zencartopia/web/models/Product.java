@@ -30,7 +30,7 @@ public class Product {
     private String imageUrl;
 
     @Column(nullable = false)
-    private int quantity; // Added quantity field
+    private int aquantity;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
@@ -98,12 +98,12 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getAQuantity() {
+        return aquantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setAQuantity(int quantity) {
+        this.aquantity = quantity;
     }
 
     public List<OrderItem> getOrderItems() {

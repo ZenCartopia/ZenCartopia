@@ -1,8 +1,20 @@
 import React from "react";
 import { useCartStore } from "../store/CartStore";
+import {useNavigate} from "react-router-dom";
 
 function Cart() {
+  const token = useCartStore.getState().token; 
+  const navigate = useNavigate(); 
   const { cartItems, removeFromCart, updateCartItemQuantity } = useCartStore();
+
+  const handleCheckOut = () => {
+    localStorage.setItem("lastPage", "/checkout");
+    if (token) {
+      navigate("/checkout")
+    } else {
+      navigate("/userauth")
+    }
+  };
 
   const handleIncreaseQuantity = (title, currentQuantity) => {
     updateCartItemQuantity(title, currentQuantity + 1);
@@ -89,7 +101,7 @@ function Cart() {
             <p className="text-xl font-bold mr-4">
               Grand Total: ${total.toFixed(2)}
             </p>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <button onClick={() => handleCheckOut()} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
               Proceed to Checkout
             </button>
           </div>

@@ -45,6 +45,9 @@ export const useCartStore = create(
           ),
         })),
 
+        // Clear all items from cart
+        clearCart: () => set({ cartItems: [] }),
+
       // Login action
       login: (userData, token) => {
         set({ user: userData, token });

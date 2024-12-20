@@ -3,17 +3,18 @@ import "../style/Cards.css";
 import { FaCartArrowDown } from "react-icons/fa";
 import { useCartStore } from "../store/CartStore";
 
-export function Cards({ image, title, price, description, productId, quantity }) {
+export function Cards({ id, image, title, price, description, productId, aquantity }) {
   const { addToCart } = useCartStore();
   const [showPopup, setShowPopup] = useState(false); // For adding a pop-up when adding to cart
 
   const handleAddToCart = () => {
     const item = {
+      id, 
       image,
       title,
       price,
       description,
-      quantity, // Add quantity to the item
+      aquantity
     };
     addToCart(item); // Add item to the cart
 
@@ -40,11 +41,11 @@ export function Cards({ image, title, price, description, productId, quantity })
         {/* Display the available quantity from the backend */}
         <div className="my-4">
           {/* <h3 className="font-bold text-gray-600">Available Quantity: {quantity}</h3> */}
-          {quantity === 0 ? (
+          {aquantity === 0 ? (
             <p className="text-red-500">Out of Stock</p>
           ) : (
             <div className="flex items-center gap-4 mb-4">
-              <label htmlFor="quantity" className="text-gray-600 font-semibold">Available Quantity: {quantity}</label>
+              <label htmlFor="quantity" className="text-gray-600 font-semibold">Available Quantity: {aquantity}</label>
             </div>
           )}
         </div>

@@ -151,7 +151,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Table(name = "users")
 public class User {
     @Id
@@ -181,9 +180,9 @@ public class User {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders;
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Order> orders;
 
     @PrePersist
     protected void onCreate() {

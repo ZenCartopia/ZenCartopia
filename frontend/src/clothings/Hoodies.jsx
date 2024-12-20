@@ -14,6 +14,17 @@ function Hoodies({ searchQuery }) {
   );
 
   useEffect(() => {
+    const updatePageHistory = (currentPage) => {
+      const lastPage = localStorage.getItem("currPage");
+    
+      if (lastPage && lastPage !== currentPage) {
+        localStorage.setItem("lastPage", lastPage);
+      }
+    
+      localStorage.setItem("currPage", currentPage); 
+    };
+    
+    updatePageHistory("/hoodies");
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hoodies");
@@ -71,11 +82,12 @@ function Hoodies({ searchQuery }) {
           sortedHoodies.map((hoodie, index) => (
             <Cards
               key={index}
+              id={hoodie.id}
               image={"/public/"+hoodie.imageUrl}
               title={hoodie.title}
               price={hoodie.price}
               description={hoodie.description}
-              quantity={hoodie.quantity}
+              aquantity={hoodie.aquantity}
             />
           ))
         ) : (
