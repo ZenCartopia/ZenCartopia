@@ -5,26 +5,19 @@ import "../style/Cards.css";
 function Hoodies({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
   const [hoodiesData, setHoodiesData] = useState([]);
-
-  // Filter hoodies based on search query
-  const filteredHoodies = hoodiesData.filter((hoodie) =>
-    `${hoodie.title} ${hoodie.description}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
     const updatePageHistory = (currentPage) => {
       const lastPage = localStorage.getItem("currPage");
-    
       if (lastPage && lastPage !== currentPage) {
         localStorage.setItem("lastPage", lastPage);
       }
-    
-      localStorage.setItem("currPage", currentPage); 
+      localStorage.setItem("currPage", currentPage);
     };
-    
+
     updatePageHistory("/hoodies");
+
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hoodies");
@@ -32,15 +25,19 @@ function Hoodies({ searchQuery }) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         setHoodiesData(data);
       } catch (error) {
         console.error("Error fetching hoodies products:", error);
       }
     };
-  
+
     fetchProductsByCategory();
   }, []);
+
+  // Filter hoodies based on search query
+  const filteredHoodies = hoodiesData.filter((hoodie) =>
+    `${hoodie.title} ${hoodie.description}`.toLowerCase().includes(query)
+  );
 
   // Sort filtered hoodies
   const sortedHoodies = [...filteredHoodies].sort((a, b) => {
@@ -59,10 +56,7 @@ function Hoodies({ searchQuery }) {
     <div>
       {/* Dropdown menu for sorting */}
       <div className="sort-controls mb-4 flex items-center justify-start space-x-4 p-6">
-        <label
-          htmlFor="sortBy"
-          className="text-lg text-slate-900 font-semibold"
-        >
+        <label htmlFor="sortBy" className="text-lg text-slate-900 font-semibold">
           Sort By:
         </label>
         <select
@@ -77,13 +71,15 @@ function Hoodies({ searchQuery }) {
           <option value="price-desc">Price (High to Low)</option>
         </select>
       </div>
+
+      {/* Render sorted and filtered hoodie cards */}
       <div className="card-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedHoodies.length > 0 ? (
           sortedHoodies.map((hoodie, index) => (
             <Cards
               key={index}
               id={hoodie.id}
-              image={"/public/"+hoodie.imageUrl}
+              image={"/public/" + hoodie.imageUrl}
               title={hoodie.title}
               price={hoodie.price}
               description={hoodie.description}
@@ -102,4 +98,5 @@ function Hoodies({ searchQuery }) {
 
 // Export getData to access the hoodies data
 Hoodies.getData = () => hoodiesData;
+
 export default Hoodies;

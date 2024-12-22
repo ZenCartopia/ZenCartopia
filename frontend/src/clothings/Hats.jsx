@@ -5,20 +5,9 @@ import "../style/Cards.css";
 function Hats({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
   const [hatsData, setHatsData] = useState([]);
-
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
-    const updatePageHistory = (currentPage) => {
-      const lastPage = localStorage.getItem("currPage"); 
-    
-      if (lastPage && lastPage !== currentPage) {
-        localStorage.setItem("lastPage", lastPage);
-      }
-      localStorage.setItem("currPage", currentPage);
-    };
-  
-    updatePageHistory("/hats");
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Hats");
@@ -26,16 +15,14 @@ function Hats({ searchQuery }) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         setHatsData(data);
       } catch (error) {
         console.error("Error fetching hats products:", error);
       }
     };
-  
+
     fetchProductsByCategory();
   }, []);
-  
 
   // Filter hats based on the search query
   const filteredHats = hatsData.filter((hat) =>
@@ -59,10 +46,7 @@ function Hats({ searchQuery }) {
     <div>
       {/* Dropdown menu for sorting */}
       <div className="sort-controls mb-4 flex items-center justify-start space-x-4 p-6">
-        <label
-          htmlFor="sortBy"
-          className="text-lg text-slate-900 font-semibold"
-        >
+        <label htmlFor="sortBy" className="text-lg text-slate-900 font-semibold">
           Sort By:
         </label>
         <select
@@ -102,7 +86,5 @@ function Hats({ searchQuery }) {
   );
 }
 
-// Export getData to access the hats data
 Hats.getData = () => hatsData;
-
 export default Hats;

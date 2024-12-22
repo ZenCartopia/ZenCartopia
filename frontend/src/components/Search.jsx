@@ -1,21 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "../components/Cards";
-import Hoodies from "../clothings/Hoodies";
-import Shirt from "../clothings/Shirt";
-import Hats from "../clothings/Hats";
 
 function Search({ searchQuery }) {
-  const hoodies = Hoodies.getData();
-  const shirts = Shirt.getData();
-  const hats = Hats.getData();
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = [...hoodies, ...shirts, ...hats];
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true); // Set loading to true before fetching
 
+        // Fetch data for each category from the backend
+        const fetchCategoryData = async (category) => {
+          const response = await fetch(`http://localhost:5454/api/products/by-category?categoryName=${category}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          return data;
+        };
+
+        // Fetch products for each category
+        const hoodiesData = await fetchCategoryData("Hoodies");
+        console.log(hoodiesData);
+        const shirtsData = await fetchCategoryData("Shirts");
+        const hatsData = await fetchCategoryData("Hats");
+
+        // Combine all the fetched products into a single array
+        setAllProducts([...hoodiesData, ...shirtsData, ...hatsData]);
+
+        setLoading(false); // Set loading to false after data is fetched
+      } catch (error) {
+        console.error("Error fetching all products:", error);
+        setLoading(false); // Set loading to false if there's an error
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // Filter products based on the search query
+  const query = searchQuery ? searchQuery.toLowerCase() : "";
   const filteredProducts = allProducts.filter((product) =>
-    `${product.title} ${product.description}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+    `${product.title} ${product.description}`.toLowerCase().includes(query)
   );
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
@@ -25,7 +57,7 @@ function Search({ searchQuery }) {
           {filteredProducts.map((product, index) => (
             <Cards
               key={index}
-              image={product.image}
+              image={"/public/" + product.imageUrl}
               title={product.title}
               price={product.price}
               description={product.description}

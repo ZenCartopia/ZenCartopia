@@ -5,22 +5,21 @@ import "../style/Cards.css";
 function Shirt({ searchQuery }) {
   const [sortOption, setSortOption] = useState("name-asc");
   const [shirtsData, setShirtsData] = useState([]);
-
   const query = searchQuery ? searchQuery.toLowerCase() : "";
 
   useEffect(() => {
     const updatePageHistory = (currentPage) => {
-      const lastPage = localStorage.getItem("currPage"); 
-    
+      const lastPage = localStorage.getItem("currPage");
       if (lastPage && lastPage !== currentPage) {
         localStorage.setItem("lastPage", lastPage);
       }
-    
-      localStorage.setItem("currPage", currentPage); 
+      localStorage.setItem("currPage", currentPage);
     };
-    
+
+    Shirt.getData = () => shirtsData;
+
     updatePageHistory("/shirt");
-    
+
     const fetchProductsByCategory = async () => {
       try {
         const response = await fetch("http://localhost:5454/api/products/by-category?categoryName=Shirts");
@@ -28,22 +27,21 @@ function Shirt({ searchQuery }) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         setShirtsData(data);
       } catch (error) {
         console.error("Error fetching shirts products:", error);
       }
     };
-  
+
     fetchProductsByCategory();
   }, []);
 
-  // Filter shirts based on the search query
+  // Filter shirts based on search query
   const filteredShirts = shirtsData.filter((shirt) =>
     `${shirt.title} ${shirt.description}`.toLowerCase().includes(query)
   );
 
-  // Sort shirts based on the selected sort option
+  // Sort filtered shirts
   const sortedShirts = [...filteredShirts].sort((a, b) => {
     const [sortBy, sortOrder] = sortOption.split("-");
     if (sortBy === "name") {
@@ -82,7 +80,8 @@ function Shirt({ searchQuery }) {
           sortedShirts.map((shirt, index) => (
             <Cards
               key={index}
-              image={".." + shirt.imageUrl}
+              id={shirt.id}
+              image={"../" + shirt.imageUrl}
               title={shirt.title}
               price={shirt.price}
               description={shirt.description}
@@ -91,7 +90,7 @@ function Shirt({ searchQuery }) {
           ))
         ) : (
           <p className="text-center text-xl font-semibold text-gray-700">
-            No results found for "{searchQuery}"
+            No results found for "{searchQuery}".
           </p>
         )}
       </div>
