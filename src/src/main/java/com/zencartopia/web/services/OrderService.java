@@ -57,6 +57,7 @@ public class OrderService {
 
                     // Fetch the Product using its ID
                     Optional<Product> productOptional = productRepository.findById(cartItem.getProduct_id());
+                    System.out.println(cartItem.getProduct_id());
                     if (productOptional.isPresent()) {
                         Product product = productOptional.get();
                         orderItem.setProduct(product);
