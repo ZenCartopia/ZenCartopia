@@ -62,7 +62,7 @@ Ensure you have the following installed:
 
 Ensure you have the following installed:
 
-- [Java 11 or higher](https://openjdk.java.net/)
+- [Java 23](https://openjdk.java.net/)
 - [Maven](https://maven.apache.org/)
 - [MySQL](https://www.mysql.com/)
 
@@ -71,13 +71,12 @@ Ensure you have the following installed:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/zencartopia-backend.git
-   cd zencartopia-backend
+   git clone https://github.com/ZenCartopia/ZenCartopia.git
    ```
 
 2. **Install dependencies:**
 
-   In your IDE (e.g., IntelliJ IDEA or Eclipse):
+   In your IDE (e.g., IntelliJ IDEA):
 
    - **Right-click on the `pom.xml` file**, and select **Maven** -> **Download Sources**.
    - **Right-click** again and select **Maven** -> **Reload Projects** to ensure all dependencies are properly downloaded.
@@ -90,7 +89,38 @@ Ensure you have the following installed:
 
    In your IDE, run the `ZenCartopiaApplication` class (main application class).
 
-   The backend will be available at `http://localhost:5454`.
+
+## Running in Eclipse
+
+To run the backend on Eclipse, follow these steps:
+
+### Import the Project:
+
+1. Open Eclipse and select **File** -> **Import**.
+2. Choose **Existing Maven Projects**.
+
+### Install Dependencies:
+
+1. Right-click on the `pom.xml` file and choose **Maven** -> **Update Project**.
+2. Check the box for **Force Update of Snapshots/Releases**, then click **OK**.
+
+### Run the Application:
+
+1. Right-click on the root folder of the project.
+2. Select **Run As** -> **Java Application**.
+3. Choose the `ZenCartopiaApplication` class to start the server.
+
+### Run the SQL Script:
+
+Before running the backend, ensure you have created the necessary database in MySQL. You will need to run the provided SQL script to set up the required tables and data for the application.
+
+1. Open MySQL Workbench or any other MySQL client.
+2. Run the SQL script located in the `root` folder.
+
+### Java Version Requirement:
+
+Ensure that **Java version 23** is installed and set as the default Java version on your system.
+
 
 ---
 
@@ -107,10 +137,6 @@ server.port=5454
 
 # Logging Configuration
 logging.level.org.springframework.security=DEBUG
-
-# Security User Credentials
-spring.security.user.name=vishrut
-spring.security.user.password=kevadiya
 
 # Database Configuration (MySQL Example)
 spring.datasource.url=jdbc:mysql://localhost:3306/zencartopia
