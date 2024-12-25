@@ -64,8 +64,14 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
 
         // Handle payment information
         if (user.getPaymentInformation() != null) {
-            // Save the payment information
             PaymentInformation payment = user.getPaymentInformation();
+
+            // Validate payment information fields
+            if (payment.getCardHolderName() == null || payment.getCardHolderName().isEmpty()) {
+                throw new IllegalArgumentException("Card holder name is required");
+            }
+
+            // Save the payment information
             paymentRepository.save(payment);  // Save payment first
 
             // Associate the payment with the user
@@ -84,6 +90,7 @@ public class IdentityServiceImpl implements IdentityService, UserDetailsService 
         AuthResponse authResponse = new AuthResponse(newUser.getId(), token, "SignUp Success");
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
     }
+
 
 
 
